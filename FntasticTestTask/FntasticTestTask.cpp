@@ -2,10 +2,100 @@
 //
 
 #include <iostream>
+#include <string>
+#include <cstdlib>
+#include <cctype>
+#include <algorithm>
+#include <unordered_set>
+#include <map>
+#include <cstring>
+
+
+using namespace std;
+
 
 int main()
 {
-    std::cout << "Hello World!\n";
+    string str;
+
+    cout << "Enter string: ";
+    getline(cin, str);
+
+    std::transform(str.begin(), str.end(), str.begin(), tolower);
+
+    //std::unordered_set<char> temp;
+
+    std::map<char, int> map;
+    std::vector<char> cstr(str.c_str(), str.c_str() + str.size() + 1);
+
+    string answer;
+    int i = 0;
+
+    for (char chr : str)
+    {
+        if (map.find(chr) == map.end())
+        {
+           map.try_emplace(chr,i);
+
+           cstr[i] = '(';
+        }
+        else
+        {
+            cstr[i] = ')';
+            cstr[map[chr]] = ')';
+        }
+
+        i++;
+    }
+
+    std::transform(cstr.begin(), cstr.end(), std::back_inserter(answer),
+        [](char c)
+        {
+            return c;
+        });
+
+    //for (char a : str) 
+    //{
+    //    if (temp.find(a) == temp.end()) 
+    //    {
+    //        temp.insert(a);
+    //        answer.append("(");
+    //    }
+    //    else 
+    //    {
+    //        answer.append(")");
+    //    }
+    //}
+
+    /* Говно
+    for (char a : str)
+    {
+       bool temp = false;
+       int J = 0;
+
+       for (char b : str)
+       {
+           if (a == b) J++;
+          
+           if (J > 1) 
+           {
+               temp = true;
+
+               break;
+           }
+       }
+       if(temp)
+       {
+           answer.append(")");
+       }
+       else 
+       {
+           answer.append("(");
+       }
+    }
+    */
+
+    cout << answer << endl;
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
