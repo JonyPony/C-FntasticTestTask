@@ -3,12 +3,7 @@
 
 #include <iostream>
 #include <string>
-#include <cstdlib>
-#include <cctype>
-#include <algorithm>
-#include <unordered_set>
 #include <map>
-#include <cstring>
 
 
 using namespace std;
@@ -16,95 +11,39 @@ using namespace std;
 
 int main()
 {
-    string str;
+    string InputString;
 
     cout << "Enter string: ";
-    getline(cin, str);
+    getline(cin, InputString);
 
-    std::transform(str.begin(), str.end(), str.begin(), tolower);
+    std::map<char, int> AlreadyExistingSymbols;
 
-    //std::unordered_set<char> temp;
+    char* InputStringInCharArray = new char[InputString.length() + 1];
 
-    std::map<char, int> map;
-    std::vector<char> cstr(str.c_str(), str.c_str() + str.size() + 1);
-
-    string answer;
     int i = 0;
 
-    for (char chr : str)
+    for (char chr : InputString)
     {
-        if (map.find(chr) == map.end())
-        {
-           map.try_emplace(chr,i);
+        if (isupper(chr)) chr = tolower(chr);
 
-           cstr[i] = '(';
+        if (AlreadyExistingSymbols.find(chr) == AlreadyExistingSymbols.end())
+        {
+            AlreadyExistingSymbols.try_emplace(chr,i);
+
+            InputStringInCharArray[i] = '(';
         }
         else
         {
-            cstr[i] = ')';
-            cstr[map[chr]] = ')';
+            InputStringInCharArray[i] = ')';
+            InputStringInCharArray[AlreadyExistingSymbols[chr]] = ')';
         }
 
         i++;
     }
 
-    std::transform(cstr.begin(), cstr.end(), std::back_inserter(answer),
-        [](char c)
-        {
-            return c;
-        });
+    InputStringInCharArray[InputString.length()] = '\0';
 
-    //for (char a : str) 
-    //{
-    //    if (temp.find(a) == temp.end()) 
-    //    {
-    //        temp.insert(a);
-    //        answer.append("(");
-    //    }
-    //    else 
-    //    {
-    //        answer.append(")");
-    //    }
-    //}
+    cout << InputStringInCharArray << endl;
 
-    /* Говно
-    for (char a : str)
-    {
-       bool temp = false;
-       int J = 0;
-
-       for (char b : str)
-       {
-           if (a == b) J++;
-          
-           if (J > 1) 
-           {
-               temp = true;
-
-               break;
-           }
-       }
-       if(temp)
-       {
-           answer.append(")");
-       }
-       else 
-       {
-           answer.append("(");
-       }
-    }
-    */
-
-    cout << answer << endl;
+    system("pause");
 }
-
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
